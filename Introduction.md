@@ -64,7 +64,7 @@
 
             3. 对上式去掉无关项$KL(q(x_T|X_0)||P(x_T))$, 将**重点**放在最小化第3项的KL散度上. 利用贝叶斯公式思想计算出确定分布(期望的分布)$q(x_{t-1}|x_t,x_0)$, 通过假定两分布具有相同的方差,即在概率空间中具有相同的半径,将重点**再次**聚焦到两分布**均值的距离**上.
 
-            4. 期望均值是$\frac{\sqrt{\overline{\alpha}_{t-1}}\beta_t x_0+\sqrt{\alpha}_t (1-\overline{\alpha}_{t-1})x_t}{1-\overline{\alpha_t}}$, 去噪声模型(Denoised model)的输出是$P(x_{t-1}|x_t)$(反向传播概率分布)的均值
+            4. 期望均值是$\frac{\sqrt{\overline{\alpha}_{t-1}}\beta_t x_0+\sqrt{\alpha}_t (1-\overline{\alpha}_{t-1})x_t}{1-\overline{\alpha_t}}$, 去噪声模型(Denoised model)的输出是$P(x_{t-1}|x_t)$(**反向生成**概率分布)的均值
                ![image-20251213160225523](/Users/yufei/course/算法设计与智能计算/project2/DDPM/assets/image-20251213160225523.png)
 
             5. 之后利用$x_t$的构造替换掉期望均值的$x_t$, 得到Algorithm 2 Sampling算法中的4:中的逆向传播过程.
