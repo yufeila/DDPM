@@ -1,11 +1,3 @@
-<!--
- * @Author: yyf 17786321727@163.com
- * @Date: 2025-12-12 22:38:44
- * @LastEditors: yyf 17786321727@163.com
- * @LastEditTime: 2025-12-13 10:09:08
- * @FilePath: /DDPM/Introduction.md
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 # Introduction
 
 ## 要求
@@ -38,10 +30,52 @@
 ## DDPM
 
 1. Videos:
+
    1. 必看：B站李宏毅教授对Diffusion model的解析：https://www.bilibili.com/video/BV19EVUzrEF4?spm_id_from=333.788.player.switch&vd_source=32f40349361d0bab1e182b57125838ec&p=6
-      1. 数学原理清晰易懂，推导过程详细
-      2. 建议从第4个视频:Diffusion原理剖析: 1_4开始看起
-      3. 时间较长：长达1h
+
+      1. 数学原理清晰易懂，推导过程详细。
+
+      2. 建议从第4个视频:Diffusion原理剖析: 1_4开始看起。
+
+      3. 时间较长：长达1h， 因此，建议1.5倍速/2倍速。
+
+      4. 内容概括：
+
+         1. 4_1: 结合DDPM论文中的算法伪代码，结合ppt演示模型的训练过程和推理过程
+
+         2. 4_2: 
+
+            1. 首先介绍影像生成模型的机制和目标：影像生成模型用来预测真实世界中某一类集合的概率分布，它接受一个从确定性分布(通常是高斯分布)中的采样，通过网络预测出采样输入对应的输出，由于输入是概率分布，输出也是概率分布。**所有影像生成模型本质上的共同目标都是最大化似然函数（等价于最小化KL散度）**
+               $$
+               input:q(x)\\
+               转移概率： p(y|x)\\
+               output: w(y) = \int p(y|x)q(x)dx 
+               $$
+
+            2. 其次介绍了VAE和DDPM的目标函数。在训练中，由于$\log p_{\theta}(x)$难以计算，最终采用的目标函数是它的lower Bound。从$p_{\theta}(x)$出发，推导出了VAE和DDPM的lower bound， 它们具有相同的形式。
+               ![image-20251213112947152](/Users/yufei/course/算法设计与智能计算/project2/DDPM/assets/image-20251213112947152.png)
+
+         3. 4_3: 
+
+            1. 利用随机噪声之间的不不相关性,推导出前向传播的概率分布$q(x_t|x_0)$($t$取任意值)的概率分布.
+
+            2. 对4_2中的Lower Bound进行改写,改写成另一种形式
+               ![image-20251213155831351](/Users/yufei/course/算法设计与智能计算/project2/DDPM/assets/image-20251213155831351.png)
+
+            3. 对上式去掉无关项$KL(q(x_T|X_0)||P(x_T))$, 将**重点**放在最小化第3项的KL散度上. 利用贝叶斯公式思想计算出确定分布(期望的分布)$q(x_{t-1}|x_t,x_0)$, 通过假定两分布具有相同的方差,即在概率空间中具有相同的半径,将重点**再次**聚焦到两分布**均值的距离**上.
+
+            4. 期望均值是$\frac{\sqrt{\overline{\alpha}_{t-1}}\beta_t x_0+\sqrt{\alpha}_t (1-\overline{\alpha}_{t-1})x_t}{1-\overline{\alpha_t}}$, 去噪声模型(Denoised model)的输出是$P(x_{t-1}|x_t)$(反向传播概率分布)的均值
+               ![image-20251213160225523](/Users/yufei/course/算法设计与智能计算/project2/DDPM/assets/image-20251213160225523.png)
+
+            5. 之后利用$x_t$的构造替换掉期望均值的$x_t$, 得到Algorithm 2 Sampling算法中的4:中的逆向传播过程.
+               $$
+               x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1-\alpha_t}{\sqrt{1-\alpha_t}}\epsilon_{\theta}(x_t,t))+ \sigma _t z
+               $$
+
+            6. 4_4:
+
+               1. 介绍了为什么在Algorithm 2 Sampling算法的4中还要加上高斯噪声$\sigma z_t$, 李教授给了一个自己的解读;
+               2. 介绍了相关应用: 图像降噪,语音降噪, 文字降噪(这块目前不是很懂,等后续可以深入研究)
 
    2. 提高：https://www.youtube.com/watch?v=fbLgFrlTnGU
       1. 需要看完VAE下的(a), 作为前置知识
