@@ -1,3 +1,11 @@
+<!--
+ * @Author: yyf 17786321727@163.com
+ * @Date: 2025-12-12 22:38:44
+ * @LastEditors: yyf 17786321727@163.com
+ * @LastEditTime: 2025-12-13 10:09:08
+ * @FilePath: /DDPM/Introduction.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # Introduction
 
 ## 要求
@@ -30,10 +38,16 @@
 ## DDPM
 
 1. Videos:
-   1. 必看：https://www.youtube.com/watch?v=fbLgFrlTnGU
+   1. 必看：B站李宏毅教授对Diffusion model的解析：https://www.bilibili.com/video/BV19EVUzrEF4?spm_id_from=333.788.player.switch&vd_source=32f40349361d0bab1e182b57125838ec&p=6
+      1. 数学原理清晰易懂，推导过程详细
+      2. 建议从第4个视频:Diffusion原理剖析: 1_4开始看起
+      3. 时间较长：长达1h
+
+   2. 提高：https://www.youtube.com/watch?v=fbLgFrlTnGU
       1. 需要看完VAE下的(a), 作为前置知识
       2. 数学前置知识：贝叶斯公式、马尔可夫链
-      3. 具有详细的数学推导，但推导过程较复杂，建议别花太多精力在弄懂公式的每一步上。
-      4. 比较详细的阐述了基于DDPM的分类器引导采样(这一块我没看懂)
+      3. 优点是在视频中明确标注了公式和原理的来源论文
+      4. 具有详细的数学推导，但推导过程较复杂，建议别花太多精力在弄懂公式的每一步上。
+      5. 比较详细的阐述了基于DDPM的分类器引导采样(这一块我没看懂)
 
 
