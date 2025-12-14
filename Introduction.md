@@ -4,6 +4,16 @@
 
 ​	针对一个算法设计问题，完成算法设计、性能与复杂度分析和编程，提交完整的代码和报告。使用的编程语言不限，但是算法部分不能用库函数实现，同时算法不能过于浅显/简单。某些模块的代码如果参考了他人成果，需要明确指出出处，不能抄袭。比如，可以实现一个Alpha Go、对本学院相关专业某篇高质量论文中的算法进行复现（需要搭建完整的仿真环境并给出仿真结果）、利用深度学习、强化学习、遗传算法、动态规划等技术完成某个任务或者功能。
 
+
+
+## 前置知识: U-net
+
+
+
+
+
+
+
 ## GAN
 
 1. Videos
@@ -42,6 +52,9 @@
       4. 内容概括：
 
          1. 4_1: 结合DDPM论文中的算法伪代码，结合ppt演示模型的训练过程和推理过程
+
+            1. forward process(无参): 前向加噪
+            2. Reverse process(含参): 后向去噪
 
          2. 4_2: 
 
@@ -84,4 +97,68 @@
       4. 具有详细的数学推导，但推导过程较复杂，建议别花太多精力在弄懂公式的每一步上。
       5. 比较详细的阐述了基于DDPM的分类器引导采样(这一块我没看懂)
 
+2. Codes
 
+   1. DDPM: 原始的DDPM的代码使用TensorFlow实现的, 但很遗憾我并不会TensorFlow, 所以我不打算将其作为浮现的第一个代码. 代码仓库见下
+      ```
+      https://github.com/hojonathanho/diffusion
+      
+      ```
+
+      
+
+   2. IDDPM: OpenAI 开源的工业界Diffusion Model的架构,在DDPM上做了重要改进, **有PyTorch 版本**, 代码已集成到项目仓库DDPM的DDPM/Improved DDPM/Code/improved-diffusion/improved_diffusion文件夹下.
+      ```
+      https://github.com/openai/improved-diffusion
+      ```
+
+
+
+
+
+
+## 进度
+
+(1) 目前,我已跑通IDDPM的代码, 由于按照OpenAI的模型配置会导致参数量过大, 使用单张A800不能在短期内训练完,我对模型参数进行了调整,尤其是U-net的卷积层大小和残差块数.下面是我的参数:
+```shell
+export MODEL_FLAGS="\
+--image_size 32 \
+--num_channels 96 \
+--num_res_blocks 2 \
+--learn_sigma True \
+--dropout 0.1"
+
+# 和官方论文中的扩散参数保持一致
+export DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule cosine"
+
+# 添加了模型保存设置
+export TRAIN_FLAGS="\
+--lr 1e-4 \
+--batch_size 32 \
+--use_fp16 True \
+--ema_rate 0.9999 \
+--log_interval 100 \
+--save_interval 10000"
+
+```
+
+OpenAI原始参数:
+```shell
+# 模型参数：32x32图片，128通道，3个残差块，学习方差
+export MODEL_FLAGS="\
+--image_size 32 \
+--num_channels 128 \
+--num_res_blocks 3 \
+--learn_sigma True \
+--dropout 0.3"
+
+# 扩散参数：4000步扩散，余弦噪声调度
+export DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule cosine"
+
+# 训练参数：学习率，Batch Size (根据显存调整，如 32 或 64)
+export TRAIN_FLAGS="--lr 1e-4 --batch_size 32"
+```
+
+
+
+(3) 分工: 噪声预测网络(U-net)的训练需要较大的算力,我将在我的服务器上运行, 我已提供了训练出的模型,只需要用`/scripts/image-sample.py`运行相应步长的模型,就可得到.npz文件, 打印前16张图,即可得到反向去燥效果.
