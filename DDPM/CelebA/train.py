@@ -9,14 +9,14 @@ from utils.diffusion_utils import *
 
 # --- 配置 ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-data_path = "YOUR_CELEBA_HQ_PATH" # 修改为你的数据集路径
+data_path = "./CelebA-HQ/raw/" 
 save_dir = "./checkpoints_celeb256_third"
 os.makedirs(save_dir, exist_ok=True)
 
 # 断点续训配置
 load_path = "/4T/whf/qt/DDPM/myddpm/checkpoints_celeb256_third/ddpm_step100000.pt"
-num_steps = 200000   # 设为你的终点步数
-step_counter = 100000 # 设为你的起始步数
+num_steps = 200000  
+step_counter = 100000
 
 # --- 初始化 ---
 dataset = CelebAHQDataset(data_path, transform=get_transforms())
